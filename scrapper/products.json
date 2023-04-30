@@ -583,7 +583,7 @@
         "category": "Electronics",
         "image": "https://images-na.ssl-images-amazon.com/images/I/51t2CkfmS5L._AC_UL300_SR300,200_.jpg",
         "title": "Chromecast with Google TV (HD) - Streaming Stick Entertainment on Your TV with Voice Search - Watch Movies, Shows, and Live TV in 1080p HD - Snow",
-        "price": null,
+        "price": "$31.88",
         "rating": {
             "text": "4.6 out of 5 stars",
             "value": 4.6
@@ -2183,7 +2183,7 @@
         "category": "Kitchen",
         "image": "https://images-na.ssl-images-amazon.com/images/I/31wmO7cjBqL._AC_UL300_SR300,200_.jpg",
         "title": "YETI Rambler 20 oz Stainless Steel Vacuum Insulated Tumbler w/MagSlider Lid",
-        "price": "$35.00",
+        "price": "$35.73",
         "rating": {
             "text": "4.8 out of 5 stars",
             "value": 4.8
@@ -2489,21 +2489,12 @@
             "value": 4.7
         }
     },
-    {
-        "category": "Kitchen",
-        "image": "https://images-na.ssl-images-amazon.com/images/I/21b4XzHDrDL._AC_UL300_SR300,200_.jpg",
-        "title": "YETI Rambler 30 oz Stainless Steel Vacuum Insulated Tumbler w/MagSlider Lid",
-        "price": "$38.00",
-        "rating": {
-            "text": "4.8 out of 5 stars",
-            "value": 4.8
-        }
-    },
+    
     {
         "category": "Kitchen",
         "image":"https://images-na.ssl-images-amazon.com/images/I/21b4XzHDrDL._AC_UL600_SR600,400_.jpg",
         "title": "YETI Rambler 30 oz Stainless Steel Vacuum Insulated Tumbler w/MagSlider Lid",
-        "price": null,
+        "price": "$35.73",
         "rating": {
             "text": "4.8 out of 5 stars",
             "value": 4.8
@@ -4072,7 +4063,7 @@
     {
         "category": "Automotive",
         "image": "https://images-na.ssl-images-amazon.com/images/I/61KPqJXngGL._AC_UL300_SR300,200_.jpg",
-        "title": null,
+        "title": "Qifutan Cell Phone Stand for Phone Automobile Accessories 360 Degree Rotation (Blue)",
         "price": null,
         "rating": null
     },
@@ -4289,7 +4280,7 @@
     {
         "category": "Automotive",
         "image": "https://images-na.ssl-images-amazon.com/images/I/81enMVWHuvL._AC_UL300_SR300,200_.jpg",
-        "title": null,
+        "title": "Qifutan Cell Phone Stand for Dashboard and Windshield (Red)",
         "price": null,
         "rating": null
     },
@@ -4326,7 +4317,7 @@
     {
         "category": "Automotive",
         "image": "https://images-na.ssl-images-amazon.com/images/I/71qXZ-SG4sL._AC_UL300_SR300,200_.jpg",
-        "title": null,
+        "title": "Qifutan Automotive Tools Extended Reach Dual Head Air Chuck Tire Air Chuck 1/4\" Automobile Cradles for RV Light Grey",
         "price": null,
         "rating": null
     },
@@ -4403,7 +4394,7 @@
     {
         "category": "Automotive",
         "image": "https://images-na.ssl-images-amazon.com/images/I/81Y-AaL8zcL._AC_UL300_SR300,200_.jpg",
-        "title": null,
+        "title": "Automobile Accessories Automotive Replacement Control Arm Shaft Kits Red",
         "price": null,
         "rating": null
     },
@@ -4870,7 +4861,7 @@
     {
         "category": "Automotive",
         "image": "https://images-na.ssl-images-amazon.com/images/I/51a8ZBjvUgL._AC_UL300_SR300,200_.jpg",
-        "title": null,
+        "title": "Phone Holder Car [Upgrade Clip Never Fall] Car Phone Holder Mount Automobile Air Vent Hands Free Cell Phone Holder for Car Fit for All Car Mount for iPhone Android Smartphone",
         "price": null,
         "rating": {
             "text": "4.4 out of 5 stars",
@@ -4950,7 +4941,7 @@
     {
         "category": "Automotive",
         "image": "https://images-na.ssl-images-amazon.com/images/I/81hCfOf81pL._AC_UL300_SR300,200_.jpg",
-        "title": null,
+        "title": "Holikme Drill Brush 4 Piece Orange",
         "price": null,
         "rating": null
     },
@@ -5267,7 +5258,7 @@
     {
         "category": "Computers & Accessories",
         "image": "https://images-na.ssl-images-amazon.com/images/I/71LbNQh0aPL._AC_UL300_SR300,200_.jpg",
-        "title": null,
+        "title": "SGIN Laptop 12GB RAM 512GB SSD, 15.6 Inch Windows 11 Laptops with Intel Celeron N5095 Quad-Core Processor(up to 2.9 GHz), Full HD 1080P Screen, Mini HDMI, 2.4/5.0G WiFi, Webcam, Bluetooth 4.2, Grey",
         "price": null,
         "rating": {
             "text": "4.5 out of 5 stars",
