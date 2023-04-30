@@ -1,8 +1,10 @@
 import puppeteer from "puppeteer-core";
+import autoScroll from "./autoScroll.js";
+import fs from "fs";
 import dotenv from "dotenv";
 dotenv.config();
 
-async function run() {
+async function bestSellers() {
     // it will take some time to run so just wait
     let browser;
 
@@ -43,7 +45,10 @@ async function run() {
                     image: imageElement ? imageElement.src : null,
                     title: titleElement ? titleElement.innerText.trim() : null,
                     price: priceElement ? priceElement.innerText.trim() : null,
-                    rating: ratingElement ? ratingElement.innerText.trim() : null,
+                    rating: ratingElement ? {
+                            text: ratingElement.innerText.trim(),
+                            value: parseInt(ratingElement.innerText.trim().split(' ')[0]),
+                        } : null,
                 }
             })
         })
@@ -59,11 +64,148 @@ async function run() {
 }
 }
 
-run();
+async function scrapeProducts(url,pages,category) {
+    // it will take some time to run so just wait
+    let browser;
 
-// this is the html for the products
-/* 
-// <li class="a-carousel-card" style="width: 225px; margin-left: 48px;" role="listitem" aria-setsize="20" aria-posinset="1" aria-hidden="false"><div class="a-section zg-bdg-ctr"><div class="a-section zg-bdg-body zg-bdg-clr-body aok-float-left"><span class="zg-bdg-text">#1</span></div><div class="a-section zg-bdg-tri zg-bdg-clr-tri aok-float-left"></div></div><div class="zg-carousel-general-faceout"><div id="B0014C2NBC" class="p13n-sc-uncoverable-faceout"><a class="a-link-normal" tabindex="-1" href="/Crocs-Unisex-Classic-Black-Women/dp/B0014C2NBC/ref=zg-bs_fashion_sccl_1/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0014C2NBC&amp;psc=1" role="link"><div class="a-section a-spacing-mini _cDEzb_noop_3Xbw5"><img alt="Crocs Unisex-Adult Classic Clog" src="https://images-na.ssl-images-amazon.com/images/I/81Vekenn4lL._AC_UL225_SR225,160_.jpg" class="a-dynamic-image p13n-sc-dynamic-image p13n-product-image" height="160px" data-a-dynamic-image="{&quot;https://images-na.ssl-images-amazon.com/images/I/81Vekenn4lL._AC_UL225_SR225,160_.jpg&quot;:[225,160],&quot;https://images-na.ssl-images-amazon.com/images/I/81Vekenn4lL._AC_UL450_SR450,320_.jpg&quot;:[450,320],&quot;https://images-na.ssl-images-amazon.com/images/I/81Vekenn4lL._AC_UL675_SR675,480_.jpg&quot;:[675,480]}" style="max-width:225px;max-height:160px"></div></a><a class="a-link-normal" href="/Crocs-Unisex-Classic-Black-Women/dp/B0014C2NBC/ref=zg-bs_fashion_sccl_1/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0014C2NBC&amp;psc=1" role="link"><span><div class="p13n-sc-truncate p13n-sc-truncate-desktop-type2 p13n-sc-line-clamp-4" aria-hidden="true" data-rows="4">Crocs Unisex-Adult Classic Clog</div></span></a><div class="a-row"><div class="a-icon-row"><a class="a-link-normal" title="4.8 out of 5 stars" href="/product-reviews/B0014C2NBC/ref=zg-bs_fashion_cr_sccl_1/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0014C2NBC"><i class="a-icon a-icon-star-small a-star-small-5 aok-align-top"><span class="a-icon-alt">4.8 out of 5 stars</span></i> <span class="a-size-small">512,775</span></a></div></div><div class="a-row"><div class="a-row"><div class="_cDEzb_p13n-sc-price-animation-wrapper_3PzN2"><a class="a-link-normal a-text-normal" href="/Crocs-Unisex-Classic-Black-Women/dp/B0014C2NBC/ref=zg-bs_fashion_sccl_1/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0014C2NBC&amp;psc=1" role="link"><div class="a-row"><span class="a-size-base a-color-price"><span class="_cDEzb_p13n-sc-price_3mJ9Z">$32.23</span></span></div></a></div></div></div></div></div></li><li class="a-carousel-card" style="width: 225px; margin-left: 48px;" role="listitem" aria-setsize="20" aria-posinset="2" aria-hidden="false"><div class="a-section zg-bdg-ctr"><div class="a-section zg-bdg-body zg-bdg-clr-body aok-float-left"><span class="zg-bdg-text">#2</span></div><div class="a-section zg-bdg-tri zg-bdg-clr-tri aok-float-left"></div></div><div class="zg-carousel-general-faceout"><div id="B0000ANHT7" class="p13n-sc-uncoverable-faceout"><a class="a-link-normal" tabindex="-1" href="/Carhartt-Workwear-Pocket-Short-Sleeve-T-Shirt/dp/B0000ANHT7/ref=zg-bs_fashion_sccl_2/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0000ANHT7&amp;psc=1" role="link"><div class="a-section a-spacing-mini _cDEzb_noop_3Xbw5"><img alt="Carhartt Men's Loose Fit Heavyweight Short-Sleeve Pocket T-Shirt" src="https://images-na.ssl-images-amazon.com/images/I/517RtJsGyHL._AC_UL225_SR225,160_.jpg" class="a-dynamic-image p13n-sc-dynamic-image p13n-product-image" height="160px" data-a-dynamic-image="{&quot;https://images-na.ssl-images-amazon.com/images/I/517RtJsGyHL._AC_UL225_SR225,160_.jpg&quot;:[225,160],&quot;https://images-na.ssl-images-amazon.com/images/I/517RtJsGyHL._AC_UL450_SR450,320_.jpg&quot;:[450,320],&quot;https://images-na.ssl-images-amazon.com/images/I/517RtJsGyHL._AC_UL675_SR675,480_.jpg&quot;:[675,480]}" style="max-width:225px;max-height:160px"></div></a><a class="a-link-normal" href="/Carhartt-Workwear-Pocket-Short-Sleeve-T-Shirt/dp/B0000ANHT7/ref=zg-bs_fashion_sccl_2/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0000ANHT7&amp;psc=1" role="link"><span><div class="p13n-sc-truncate p13n-sc-truncate-desktop-type2 p13n-sc-line-clamp-4" aria-hidden="true" data-rows="4">Carhartt Men's Loose Fit Heavyweight Short-Sleeve Pocket T-Shirt</div></span></a><div class="a-row"><div class="a-icon-row"><a class="a-link-normal" title="4.6 out of 5 stars" href="/product-reviews/B0000ANHT7/ref=zg-bs_fashion_cr_sccl_2/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0000ANHT7"><i class="a-icon a-icon-star-small a-star-small-4-5 aok-align-top"><span class="a-icon-alt">4.6 out of 5 stars</span></i> <span class="a-size-small">107,330</span></a></div></div><div class="a-row"><div class="a-row"><div class="_cDEzb_p13n-sc-price-animation-wrapper_3PzN2"><a class="a-link-normal a-text-normal" href="/Carhartt-Workwear-Pocket-Short-Sleeve-T-Shirt/dp/B0000ANHT7/ref=zg-bs_fashion_sccl_2/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0000ANHT7&amp;psc=1" role="link"><div class="a-row"><span class="a-size-base a-color-price"><span class="_cDEzb_p13n-sc-price_3mJ9Z">$14.99</span></span></div></a></div></div></div></div></div></li><li class="a-carousel-card" style="width: 225px; margin-left: 48px;" role="listitem" aria-setsize="20" aria-posinset="3" aria-hidden="false"><div class="a-section zg-bdg-ctr"><div class="a-section zg-bdg-body zg-bdg-clr-body aok-float-left"><span class="zg-bdg-text">#3</span></div><div class="a-section zg-bdg-tri zg-bdg-clr-tri aok-float-left"></div></div><div class="zg-carousel-general-faceout"><div id="B0BBGDFH4V" class="p13n-sc-uncoverable-faceout"><a class="a-link-normal" tabindex="-1" href="/12-Travel-Compression-Packing-Essentials/dp/B0BBGDFH4V/ref=zg-bs_fashion_sccl_3/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0BBGDFH4V&amp;psc=1" role="link"><div class="a-section a-spacing-mini _cDEzb_noop_3Xbw5"><img alt="12 Travel Compression Bags Vacuum Packing, Roll Up Travel Space Saver Bags for Luggage, Cruise Ship Essentials (5 Large Roll/" src="https://images-na.ssl-images-amazon.com/images/I/71W2tt9VPbL._AC_UL225_SR225,160_.jpg" class="a-dynamic-image p13n-sc-dynamic-image p13n-product-image" height="160px" data-a-dynamic-image="{&quot;https://images-na.ssl-images-amazon.com/images/I/71W2tt9VPbL._AC_UL225_SR225,160_.jpg&quot;:[225,160],&quot;https://images-na.ssl-images-amazon.com/images/I/71W2tt9VPbL._AC_UL450_SR450,320_.jpg&quot;:[450,320],&quot;https://images-na.ssl-images-amazon.com/images/I/71W2tt9VPbL._AC_UL675_SR675,480_.jpg&quot;:[675,480]}" style="max-width:225px;max-height:160px"></div></a><a class="a-link-normal" href="/12-Travel-Compression-Packing-Essentials/dp/B0BBGDFH4V/ref=zg-bs_fashion_sccl_3/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0BBGDFH4V&amp;psc=1" role="link"><span><div class="p13n-sc-truncate p13n-sc-truncate-desktop-type2 p13n-sc-line-clamp-4" aria-hidden="true" data-rows="4">12 Travel Compression Bags Vacuum Packing, Roll Up Travel Space Saver Bags for Luggage, Cruise 
-// Ship Essentials (5 Large Roll/5 Medium Roll/2 Small Roll)</div></span></a><div class="a-row"><div class="a-icon-row"><a class="a-link-normal" title="4.4 out of 5 stars" href="/product-reviews/B0BBGDFH4V/ref=zg-bs_fashion_cr_sccl_3/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0BBGDFH4V"><i class="a-icon a-icon-star-small a-star-small-4-5 aok-align-top"><span class="a-icon-alt">4.4 out of 5 stars</span></i> <span class="a-size-small">29,097</span></a></div></div><div class="a-row"><div class="a-row"><div class="_cDEzb_p13n-sc-price-animation-wrapper_3PzN2"><a class="a-link-normal a-text-normal" href="/12-Travel-Compression-Packing-Essentials/dp/B0BBGDFH4V/ref=zg-bs_fashion_sccl_3/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0BBGDFH4V&amp;psc=1" role="link"><div class="a-row"><span class="a-size-base a-color-price"><span class="_cDEzb_p13n-sc-price_3mJ9Z">$12.79</span></span></div></a></div></div></div></div></div></li><li class="a-carousel-card" style="width: 225px; margin-left: 48px;" role="listitem" aria-setsize="20" aria-posinset="4" aria-hidden="false"><div class="a-section zg-bdg-ctr"><div class="a-section zg-bdg-body zg-bdg-clr-body aok-float-left"><span class="zg-bdg-text">#4</span></div><div class="a-section zg-bdg-tri zg-bdg-clr-tri aok-float-left"></div></div><div class="zg-carousel-general-faceout"><div id="B077ZMKWVM" class="p13n-sc-uncoverable-faceout"><a class="a-link-normal" tabindex="-1" href="/Gildan-Mens-T-Shirt-White-Large/dp/B077ZMKWVM/ref=zg-bs_fashion_sccl_4/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B077ZMKWVM&amp;psc=1" role="link"><div class="a-section a-spacing-mini _cDEzb_noop_3Xbw5"><img alt="Gildan Men's Crew T-Shirts, Multipack, Style G1100" src="https://images-na.ssl-images-amazon.com/images/I/611pTDG91+L._AC_UL225_SR225,160_.jpg" class="a-dynamic-image p13n-sc-dynamic-image p13n-product-image" height="160px" data-a-dynamic-image="{&quot;https://images-na.ssl-images-amazon.com/images/I/611pTDG91+L._AC_UL225_SR225,160_.jpg&quot;:[225,160],&quot;https://images-na.ssl-images-amazon.com/images/I/611pTDG91+L._AC_UL450_SR450,320_.jpg&quot;:[450,320],&quot;https://images-na.ssl-images-amazon.com/images/I/611pTDG91+L._AC_UL675_SR675,480_.jpg&quot;:[675,480]}" style="max-width:225px;max-height:160px"></div></a><a class="a-link-normal" href="/Gildan-Mens-T-Shirt-White-Large/dp/B077ZMKWVM/ref=zg-bs_fashion_sccl_4/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B077ZMKWVM&amp;psc=1" role="link"><span><div class="p13n-sc-truncate p13n-sc-truncate-desktop-type2 p13n-sc-line-clamp-4" aria-hidden="true" data-rows="4">Gildan Men's Crew T-Shirts, Multipack, Style G1100</div></span></a><div class="a-row"><div class="a-icon-row"><a class="a-link-normal" title="4.6 out of 5 stars" href="/product-reviews/B077ZMKWVM/ref=zg-bs_fashion_cr_sccl_4/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B077ZMKWVM"><i class="a-icon a-icon-star-small a-star-small-4-5 aok-align-top"><span class="a-icon-alt">4.6 out of 5 stars</span></i> <span class="a-size-small">251,225</span></a></div></div><div class="a-row"><div class="a-row"><div class="_cDEzb_p13n-sc-price-animation-wrapper_3PzN2"><a class="a-link-normal a-text-normal" href="/Gildan-Mens-T-Shirt-White-Large/dp/B077ZMKWVM/ref=zg-bs_fashion_sccl_4/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B077ZMKWVM&amp;psc=1" role="link"><div class="a-row"><span class="a-size-base a-color-price"><span class="_cDEzb_p13n-sc-price_3mJ9Z">$18.99</span></span></div></a></div></div></div></div></div></li><li class="a-carousel-card" 
-// style="width: 225px; margin-left: 48px;" role="listitem" aria-setsize="20" aria-posinset="5" aria-hidden="false"><div class="a-section zg-bdg-ctr"><div class="a-section zg-bdg-body zg-bdg-clr-body aok-float-left"><span class="zg-bdg-text">#5</span></div><div class="a-section zg-bdg-tri zg-bdg-clr-tri aok-float-left"></div></div><div class="zg-carousel-general-faceout"><div id="B0B1HR89H4" class="p13n-sc-uncoverable-faceout"><a class="a-link-normal" tabindex="-1" href="/SHAPERX-Bodysuit-Shapewear-Sculpting-SZ5215-Black-S/dp/B0B1HR89H4/ref=zg-bs_fashion_sccl_5/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0B1HR89H4&amp;psc=1" role="link"><div class="a-section a-spacing-mini _cDEzb_noop_3Xbw5"><img alt="SHAPERX Bodysuit for Women Tummy Control Shapewear Seamless Sculpting Thong Body Shaper Tank Top" src="https://images-na.ssl-images-amazon.com/images/I/71LBqYGzBrL._AC_UL225_SR225,160_.jpg" class="a-dynamic-image p13n-sc-dynamic-image p13n-product-image" height="160px" data-a-dynamic-image="{&quot;https://images-na.ssl-images-amazon.com/images/I/71LBqYGzBrL._AC_UL225_SR225,160_.jpg&quot;:[225,160],&quot;https://images-na.ssl-images-amazon.com/images/I/71LBqYGzBrL._AC_UL450_SR450,320_.jpg&quot;:[450,320],&quot;https://images-na.ssl-images-amazon.com/images/I/71LBqYGzBrL._AC_UL675_SR675,480_.jpg&quot;:[675,480]}" style="max-width:225px;max-height:160px"></div></a><a class="a-link-normal" href="/SHAPERX-Bodysuit-Shapewear-Sculpting-SZ5215-Black-S/dp/B0B1HR89H4/ref=zg-bs_fashion_sccl_5/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0B1HR89H4&amp;psc=1" role="link"><span><div class="p13n-sc-truncate p13n-sc-truncate-desktop-type2 p13n-sc-line-clamp-4" aria-hidden="true" data-rows="4">SHAPERX Bodysuit for Women Tummy Control Shapewear Seamless Sculpting Thong Body Shaper Tank Top</div></span></a><div class="a-row"><div class="a-icon-row"><a class="a-link-normal" title="4.1 out of 5 stars" href="/product-reviews/B0B1HR89H4/ref=zg-bs_fashion_cr_sccl_5/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0B1HR89H4"><i class="a-icon a-icon-star-small a-star-small-4 aok-align-top"><span class="a-icon-alt">4.1 out of 5 stars</span></i> <span class="a-size-small">9,632</span></a></div></div><div class="a-row"><div class="a-row"><div class="_cDEzb_p13n-sc-price-animation-wrapper_3PzN2"><a class="a-link-normal a-text-normal" href="/SHAPERX-Bodysuit-Shapewear-Sculpting-SZ5215-Black-S/dp/B0B1HR89H4/ref=zg-bs_fashion_sccl_5/132-2473021-2007030?pd_rd_w=ldejx&amp;content-id=amzn1.sym.309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_p=309d45c5-3eba-4f62-9bb2-0acdcf0662e7&amp;pf_rd_r=HBXH9C0E4ESAJZ66PQ8H&amp;pd_rd_wg=kFo0X&amp;pd_rd_r=64634336-da7b-4aef-ab45-0738f0e34baf&amp;pd_rd_i=B0B1HR89H4&amp;psc=1" role="link"><div class="a-row"><span class="a-size-base a-color-price"><span class="_cDEzb_p13n-sc-price_3mJ9Z">$37.99</span></span></div></a></div></div></div></div></div></li> 
-*/
+    try {
+        const USERNAME = 'brd-customer-hl_441b5a29-zone-scraping_browser';
+        const PASSWORD = process.env.PASSWORD;
+        const auth = `${USERNAME}:${PASSWORD}` ;
+
+
+        browser = await puppeteer.connect({
+            browserWSEndpoint: `wss://${auth}@zproxy.lum-superproxy.io:9222`,
+        });
+
+        const page = await browser.newPage();
+        page.setDefaultNavigationTimeout(2*60*1000);
+
+        await page.goto(url);
+
+        await autoScroll(page);
+        // await page.screenshot({ path: `screenshots-${category}-${Math.random(1000)}.png`,
+        // fullPage: true });
+
+        // const selector ='.a-carousel';
+        // await page.waitForSelector(selector);
+        // const el = await page.$(selector)
+
+        // const text = await el?.evaluate((el) => el.innerHTML);
+
+        // console.log(text);
+
+const productsData= await page.evaluate((category) => {
+            const products = Array.from(document.querySelectorAll('.p13n-sc-uncoverable-faceout'));
+            return products.map(product => {
+                const titleElement = product.querySelector('._cDEzb_p13n-sc-css-line-clamp-3_g3dy1');
+                const priceElement = product.querySelector('._cDEzb_p13n-sc-price_3mJ9Z');
+                const imageElement = product.querySelector('.a-dynamic-image');
+                const ratingElement = product.querySelector('.a-icon-alt');
+
+                return {
+                    category,
+                    image: imageElement ? imageElement.src : null,
+                    title: titleElement ? titleElement.innerText.trim() : null,
+                    price: priceElement ? priceElement.innerText.trim() : null,
+                    rating: ratingElement ? {
+                            text: ratingElement.innerText.trim(),
+                            value: parseFloat(ratingElement.innerText.trim().split(' ')[0]),
+                        } : null,
+                }
+            })
+        }, category)
+        console.log(productsData);
+
+        for (let index = 1; index < pages; index++) {
+            await page.goto(`${url}/ref=zg_bs_pg_${index+1}?_encoding=UTF8&pg=${index+1}`);
+            await autoScroll(page);
+        //     await page.screenshot({ path: `screenshots-${category}-${Math.random(1000)}.png`,
+        // fullPage: true });
+            const productsData2= await page.evaluate((category) => {
+                const products = Array.from(document.querySelectorAll('.p13n-sc-uncoverable-faceout'));
+                return products.map(product => {
+                    const titleElement = product.querySelector('._cDEzb_p13n-sc-css-line-clamp-3_g3dy1');
+                    const priceElement = product.querySelector('._cDEzb_p13n-sc-price_3mJ9Z');
+                    const imageElement = product.querySelector('.a-dynamic-image');
+                    const ratingElement = product.querySelector('.a-icon-alt');
+
+                    return {
+                        category: category,
+                        image: imageElement ? imageElement.src : null,
+                        title: titleElement ? titleElement.innerText.trim() : null,
+                        price: priceElement ? priceElement.innerText.trim() : null,
+                        rating: ratingElement ? {
+                            text: ratingElement.innerText.trim(),
+                            value: parseFloat(ratingElement.innerText.trim().split(' ')[0]),
+                        } : null,
+                    }
+                })
+            }, category)
+            productsData.push(...productsData2);
+
+            
+        }
+        console.log(productsData);
+        console.log (productsData.length)
+        console.log('scrapping done')
+        return productsData;
+    }
+    catch (e) {
+        console.error('scrape failed',e);
+    }
+    finally {
+        await browser?.close();
+}
+}
+
+
+
+// bestSellers();
+const products = await scrapeProducts('https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics',2,'Electronics');
+products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Clothing-Shoes-Jewelry/zgbs/fashion',2,'Fashion'));
+products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Kitchen-Dining/zgbs/kitchen',2,'Kitchen'));
+products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Beauty/zgbs/beauty',2,'Beauty'));
+products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Automotive/zgbs/automotive',2,'Automotive'));
+products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Computers-Accessories/zgbs/pc',2,'Computers & Accessories'));
+// save products to json file
+fs.writeFileSync('products.json',JSON.stringify(products));
+
+console.log(products.length);
+
+// async function fullScrollTest() {
+//     // it will take some time to run so just wait
+//     let browser;
+
+//     try {
+//         const USERNAME = 'brd-customer-hl_441b5a29-zone-scraping_browser';
+//         const PASSWORD = process.env.PASSWORD;
+//         const auth = `${USERNAME}:${PASSWORD}` ;
+//         const url = 'https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics';
+// browser = await puppeteer.connect({
+//             browserWSEndpoint: `wss://${auth}@zproxy.lum-superproxy.io:9222`,
+//         });
+//         const page = await browser.newPage();
+//         page.setDefaultNavigationTimeout(2*60*1000);
+//         await page.goto('https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics');
+//         await page.setViewport({ width: 1200, height: 800 });
+
+//         await autoScroll(page);
+
+//         await page.screenshot({ path: 'screenshot.png',
+//         fullPage: true });
+
+//         return;
+//     }
+//     catch (e) {
+//         console.error('scrape failed',e);
+//     }
+//     finally {
+//         await browser?.close();
+// }
+// }
+
+
+
+// fullScrollTest();
+
