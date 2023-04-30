@@ -82,10 +82,14 @@ async function scrapeProducts(url,pages,category) {
         page.setDefaultNavigationTimeout(2*60*1000);
 
         await page.goto(url);
+        await page.setViewport({
+        width: 1920,
+        height: 1080
+    });
 
         await autoScroll(page);
-        // await page.screenshot({ path: `screenshots-${category}-${Math.random(1000)}.png`,
-        // fullPage: true });
+        await page.screenshot({ path: `screenshots-${category}-${Math.random(1000)}.png`,
+        fullPage: true });
 
         // const selector ='.a-carousel';
         // await page.waitForSelector(selector);
@@ -115,13 +119,17 @@ const productsData= await page.evaluate((category) => {
                 }
             })
         }, category)
-        console.log(productsData);
+        // console.log(productsData);
 
         for (let index = 1; index < pages; index++) {
             await page.goto(`${url}/ref=zg_bs_pg_${index+1}?_encoding=UTF8&pg=${index+1}`);
+            await page.setViewport({
+        width: 1920,
+        height: 1080
+    });
             await autoScroll(page);
-        //     await page.screenshot({ path: `screenshots-${category}-${Math.random(1000)}.png`,
-        // fullPage: true });
+            await page.screenshot({ path: `screenshots-${category}-${Math.random(1000)}.png`,
+        fullPage: true });
             const productsData2= await page.evaluate((category) => {
                 const products = Array.from(document.querySelectorAll('.p13n-sc-uncoverable-faceout'));
                 return products.map(product => {
@@ -146,9 +154,9 @@ const productsData= await page.evaluate((category) => {
 
             
         }
-        console.log(productsData);
-        console.log (productsData.length)
-        console.log('scrapping done')
+        // console.log(productsData);
+        // console.log (productsData.length)
+        // console.log('scrapping done')
         return productsData;
     }
     catch (e) {
@@ -162,16 +170,31 @@ const productsData= await page.evaluate((category) => {
 
 
 // bestSellers();
-const products = await scrapeProducts('https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics',2,'Electronics');
-products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Clothing-Shoes-Jewelry/zgbs/fashion',2,'Fashion'));
-products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Kitchen-Dining/zgbs/kitchen',2,'Kitchen'));
-products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Beauty/zgbs/beauty',2,'Beauty'));
-products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Automotive/zgbs/automotive',2,'Automotive'));
-products.push(...await scrapeProducts('https://www.amazon.com/Best-Sellers-Computers-Accessories/zgbs/pc',2,'Computers & Accessories'));
-// save products to json file
-fs.writeFileSync('products.json',JSON.stringify(products));
+// const categories = [
+//   {url: 'https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics', name: 'Electronics'},
+//   {url: 'https://www.amazon.com/Best-Sellers-Clothing-Shoes-Jewelry/zgbs/fashion', name: 'Fashion'},
+//   {url: 'https://www.amazon.com/Best-Sellers-Kitchen-Dining/zgbs/kitchen', name: 'Kitchen'},
+//   {url: 'https://www.amazon.com/Best-Sellers-Beauty/zgbs/beauty', name: 'Beauty'},
+//   {url: 'https://www.amazon.com/Best-Sellers-Automotive/zgbs/automotive', name: 'Automotive'},
+//   {url: 'https://www.amazon.com/Best-Sellers-Computers-Accessories/zgbs/pc', name: 'Computers & Accessories'}
+// ];
 
-console.log(products.length);
+// const products = await Promise.all(categories.map(async category => {
+//   const products = await scrapeProducts(category.url, 2, category.name);
+//   return products;
+// }));
+const electronics = await scrapeProducts('https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics', 2, 'Electronics');
+const fashion = await scrapeProducts('https://www.amazon.com/Best-Sellers-Clothing-Shoes-Jewelry/zgbs/fashion', 2, 'Fashion');
+const kitchen = await scrapeProducts('https://www.amazon.com/Best-Sellers-Kitchen-Dining/zgbs/kitchen', 2, 'Kitchen');
+const beauty = await scrapeProducts('https://www.amazon.com/Best-Sellers-Beauty/zgbs/beauty', 2, 'Beauty');
+const automotive = await scrapeProducts('https://www.amazon.com/Best-Sellers-Automotive/zgbs/automotive', 2, 'Automotive');
+const computers = await scrapeProducts('https://www.amazon.com/Best-Sellers-Computers-Accessories/zgbs/pc', 2, 'Computers & Accessories');
+
+const products = [electronics, fashion, kitchen, beauty, automotive, computers].flat();
+// save products to json file
+fs.writeFileSync('products.json',JSON.stringify(await products));
+
+console.log((await products.flat()).length);
 
 // async function fullScrollTest() {
 //     // it will take some time to run so just wait
