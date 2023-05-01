@@ -1,0 +1,22 @@
+
+version: "3.9"
+services:
+  web:
+    build: ../frontend
+    ports:
+      - "8000:3000"
+  mongo:
+    image: "mongo:latest"
+    container_name: mongo
+    expose :
+      - "27017"
+    networks:
+            - default # this network
+            - external-example  # external network
+    # external_links:
+    #         - elasticsearch:elasticsearch # external container
+    volumes:
+      - ./data:/data/db
+networks:
+    external-example: # external network (app2)
+       
