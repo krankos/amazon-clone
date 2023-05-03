@@ -79,7 +79,7 @@ async function scrapeProducts(url,pages,category) {
         });
 
         const page = await browser.newPage();
-        page.setDefaultNavigationTimeout(2*60*1000);
+        page.setDefaultNavigationTimeout(3*60*1000);
 
         await page.goto(url);
         await page.setViewport({
@@ -106,15 +106,19 @@ const productsData= await page.evaluate((category) => {
                 const priceElement = product.querySelector('._cDEzb_p13n-sc-price_3mJ9Z');
                 const imageElement = product.querySelector('.a-dynamic-image');
                 const ratingElement = product.querySelector('.a-icon-alt');
+                const numberOfRatingsElement = product.querySelector('.a-size-small');
+                const linkElement = product.querySelector('a');
 
                 return {
                     category,
+                    link: linkElement ? linkElement.href : null,
                     image: imageElement ? imageElement.src : null,
                     title: titleElement ? titleElement.innerText.trim() : null,
                     price: priceElement ? priceElement.innerText.trim() : null,
                     rating: ratingElement ? {
                             text: ratingElement.innerText.trim(),
                             value: parseFloat(ratingElement.innerText.trim().split(' ')[0]),
+                            number: numberOfRatingsElement ? parseInt(numberOfRatingsElement.innerText.trim().replace(',','')) : null,
                         } : null,
                 }
             })
@@ -137,15 +141,20 @@ const productsData= await page.evaluate((category) => {
                     const priceElement = product.querySelector('._cDEzb_p13n-sc-price_3mJ9Z');
                     const imageElement = product.querySelector('.a-dynamic-image');
                     const ratingElement = product.querySelector('.a-icon-alt');
+                    const numberOfRatingsElement = product.querySelector('.a-size-small');
+                    const linkElement = product.querySelector('a');
 
                     return {
                         category: category,
+                        link: linkElement ? linkElement.href : null,
                         image: imageElement ? imageElement.src : null,
                         title: titleElement ? titleElement.innerText.trim() : null,
                         price: priceElement ? priceElement.innerText.trim() : null,
+
                         rating: ratingElement ? {
                             text: ratingElement.innerText.trim(),
                             value: parseFloat(ratingElement.innerText.trim().split(' ')[0]),
+                            number: numberOfRatingsElement ? parseInt(numberOfRatingsElement.innerText.trim().replace(',','')) : null,
                         } : null,
                     }
                 })
@@ -155,8 +164,8 @@ const productsData= await page.evaluate((category) => {
             
         }
         // console.log(productsData);
-        // console.log (productsData.length)
-        // console.log('scrapping done')
+        console.log (productsData.length)
+        console.log('scrapping done')
         return productsData;
     }
     catch (e) {
@@ -189,12 +198,16 @@ const kitchen = await scrapeProducts('https://www.amazon.com/Best-Sellers-Kitche
 const beauty = await scrapeProducts('https://www.amazon.com/Best-Sellers-Beauty/zgbs/beauty', 2, 'Beauty');
 const automotive = await scrapeProducts('https://www.amazon.com/Best-Sellers-Automotive/zgbs/automotive', 2, 'Automotive');
 const computers = await scrapeProducts('https://www.amazon.com/Best-Sellers-Computers-Accessories/zgbs/pc', 2, 'Computers & Accessories');
+const handmade = await scrapeProducts('https://www.amazon.com/Best-Sellers-Handmade/zgbs/handmade', 2, 'Handmade');
 
-const products = [electronics, fashion, kitchen, beauty, automotive, computers].flat();
+const products = [electronics, fashion, kitchen, beauty, automotive, computers,handmade].flat();
 // save products to json file
-fs.writeFileSync('products.json',JSON.stringify(await products));
+fs.writeFileSync('products2.json',JSON.stringify(await products));
 
 console.log((await products.flat()).length);
+
+// const electronics = await scrapeProducts('https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics', 2, 'Electronics');
+// console.log(electronics);
 
 // async function fullScrollTest() {
 //     // it will take some time to run so just wait
