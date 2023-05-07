@@ -5,6 +5,11 @@ services:
     build: ../frontend
     ports:
       - "8000:3000"
+    expose :
+      - "3000"
+    networks:
+            - default # this network
+            - external-example 
   mongo:
     image: "mongo:latest"
     container_name: mongo
