@@ -11,8 +11,10 @@ services:
             - default # this network
             - external-example 
   mongo:
-    image: "mongo:latest"
+    image: mongo:latest
     container_name: mongo
+    ports:
+      - "27017:27017"
     expose :
       - "27017"
     networks:
@@ -22,10 +24,8 @@ services:
     #         - elasticsearch:elasticsearch # external container
     volumes:
       - ./data:/data/db
-    environment:
-       environment:
-       MONGO_INITDB_ROOT_USERNAME: malek 
-       MONGO_INITDB_ROOT_PASSWORD: 123  
+    
+      
 networks:
     external-example: # external network (app2)
        
