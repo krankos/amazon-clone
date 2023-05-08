@@ -79,13 +79,24 @@ async function scrapeProducts(url,pages,category) {
         });
 
         const page = await browser.newPage();
-        page.setDefaultNavigationTimeout(3*60*1000);
+        page.setDefaultNavigationTimeout(10*60*1000);
 
         await page.goto(url);
         await page.setViewport({
         width: 1920,
         height: 1080
     });
+    // if you don't find the products reload the page
+
+    while(!await page.$('.p13n-sc-uncoverable-faceout')) {
+        //wait for 5 seconds
+        // log the page body
+       const bodyContent = await page.$eval('body', el => el.innerHTML);
+console.log(bodyContent);
+
+        await page.waitForTimeout(5000);
+        await page.reload();
+    }
 
         await autoScroll(page);
         await page.screenshot({ path: `screenshots-${category}-${Math.random(1000)}.png`,
@@ -131,6 +142,14 @@ const productsData= await page.evaluate((category) => {
         width: 1920,
         height: 1080
     });
+    while(!await page.$('.p13n-sc-uncoverable-faceout')) {
+        //wait for 5 seconds
+        const bodyContent = await page.$eval('body', el => el.innerHTML);
+console.log(bodyContent);
+
+        await page.waitForTimeout(5000);
+        await page.reload();
+    }
             await autoScroll(page);
             await page.screenshot({ path: `screenshots-${category}-${Math.random(1000)}.png`,
         fullPage: true });
@@ -202,7 +221,7 @@ const handmade = await scrapeProducts('https://www.amazon.com/Best-Sellers-Handm
 
 const products = [electronics, fashion, kitchen, beauty, automotive, computers,handmade].flat();
 // save products to json file
-fs.writeFileSync('products2.json',JSON.stringify(await products));
+fs.writeFileSync('products4.json',JSON.stringify(await products));
 
 console.log((await products.flat()).length);
 

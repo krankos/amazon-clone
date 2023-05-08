@@ -1,28 +1,36 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import {getProducts} from "../lib/products";
+import Layout from "../layouts/Layout.astro";
+import { getProducts } from "../lib/products";
 const Products = await getProducts();
 if (!Products) {
-  return new Response(null, {
-    status: 404,
-    statusText: "Not found",
-  });
+	return new Response(null, {
+		status: 404,
+		statusText: "Not found",
+	});
 }
+
+// fetch products from api
+const res = await fetch("http://127.0.0.1:9200/amazon-db-6/_search", {
+	headers: {
+		"Content-Type": "application/json",
+	},
+	method: "POST",
+	body: JSON.stringify({
+		query: {
+			match_all: {},
+		},
+	}),
+});
+const data = await res.json();
+const products = data.hits.hits.map((hit) => hit._source);
 ---
 
 <Layout title="Welcome to Astro.">
 	<main>
 		<h1>Products</h1>
 		<ul>
-		  {
-			Products.map((item) => (
-			  <li>
-				{item.category}
-			  </li>
-			))
-		  }
+			{products.map((item) => <li>{JSON.stringify(item)}</li>)}
 		</ul>
-		
 	</main>
 </Layout>
 

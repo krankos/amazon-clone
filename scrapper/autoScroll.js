@@ -9,7 +9,7 @@ export default async function autoScroll(page){
                 totalHeight += distance;
 
                 if(totalHeight >= scrollHeight - window.innerHeight){
-                    clearInterval(timer+2000);
+                    clearInterval(timer+1000);
                     resolve();
                 }
             }, 100);
