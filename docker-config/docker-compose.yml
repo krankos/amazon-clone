@@ -22,6 +22,10 @@ services:
     #         - elasticsearch:elasticsearch # external container
     volumes:
       - ./data:/data/db
+    environment:
+       environment:
+       MONGO_INITDB_ROOT_USERNAME: malek 
+       MONGO_INITDB_ROOT_PASSWORD: 123  
 networks:
     external-example: # external network (app2)
        
