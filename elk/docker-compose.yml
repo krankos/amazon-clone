@@ -1,58 +1,59 @@
 version: '3.9'
 services:
-  # Elasticsearch:
-  #   image: elasticsearch:7.16.2
-  #   container_name: elasticsearch
-    
-  #   #restart: always
-  #   volumes:
-  #   - elastic_data:/usr/share/elasticsearch/data/
-  #   environment:
-  #     ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-  #     discovery.type: single-node    
-  #   ports:
-  #   - '9200:9200'
-  #   - '9300:9300'
-  #   networks:
-  #     - elk
-  #     - docker-config_external-example 
+  Elasticsearch:
+    image: elasticsearch:7.16.2
+    container_name: elasticsearch
 
-  Logstash:
-    image: logstash:7.16.2
-    container_name: logstash
     #restart: always
     volumes:
-    - ./logstash/:/logstash_dir
-    command: logstash -f /logstash_dir/logstash.conf --enable-local-plugin-development && bin/logstash-plugin install logstash-input-mongodb
-    # depends_on:
-    #   - Elasticsearch
-    ports:
-    - '9600:9600'
+      - elastic_data:/usr/share/elasticsearch/data/
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"    
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+      discovery.type: single-node
+    ports:
+      - '9200:9200'
+      - '9300:9300'
     networks:
       - elk
       - docker-config_external-example
 
-  # Kibana:
-  #   image: kibana:7.16.2
-  #   container_name: kibana
-  #   #restart: always       
-  #   ports:
-  #   - '5601:5601'
-  #   expose:
-  #     - '5601'
-  #   environment:
-  #     - ELASTICSEARCH_URL=http://elasticsearch:9200  
-  #   depends_on:
-  #     - Elasticsearch  
-  #   networks:
-  #     - elk
+  logstash:
+    container_name: logstash
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #restart: always
+    command: logstash -f /logstash_dir/logstash.conf
+    volumes:
+      - ./logstash/:/logstash_dir
+
+    # depends_on:
+    #   - Elasticsearch
+    ports:
+      - '9600:9600'
+    environment:
+      LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+    networks:
+      - elk
+      - docker-config_external-example
+  Kibana:
+    image: kibana:7.16.2
+    container_name: kibana
+    #restart: always       
+    ports:
+      - '5601:5601'
+    expose:
+      - '5601'
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - Elasticsearch
+    networks:
+      - elk
 volumes:
   elastic_data: {}
 
 networks:
   elk:
-  docker-config_external-example :
+  docker-config_external-example:
     external: true
- 
