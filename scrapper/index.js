@@ -211,7 +211,7 @@ console.log(bodyContent);
 //   const products = await scrapeProducts(category.url, 2, category.name);
 //   return products;
 // }));
-const electronics = await scrapeProducts('https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics', 2, 'Electronics');
+const electronics = await scrapeProducts('https://www.amazon.com/Best-Sellers-E1lectronics/zgbs/electronics', 2, 'Electronics');
 const fashion = await scrapeProducts('https://www.amazon.com/Best-Sellers-Clothing-Shoes-Jewelry/zgbs/fashion', 2, 'Fashion');
 const kitchen = await scrapeProducts('https://www.amazon.com/Best-Sellers-Kitchen-Dining/zgbs/kitchen', 2, 'Kitchen');
 const beauty = await scrapeProducts('https://www.amazon.com/Best-Sellers-Beauty/zgbs/beauty', 2, 'Beauty');
@@ -221,7 +221,7 @@ const handmade = await scrapeProducts('https://www.amazon.com/Best-Sellers-Handm
 
 const products = [electronics, fashion, kitchen, beauty, automotive, computers,handmade].flat();
 // save products to json file
-fs.writeFileSync('products4.json',JSON.stringify(await products));
+fs.writeFileSync('products5.json',JSON.stringify(await products));
 
 console.log((await products.flat()).length);
 
