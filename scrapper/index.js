@@ -9,8 +9,8 @@ async function bestSellers() {
     let browser;
 
     try {
-        const USERNAME = 'brd-customer-hl_441b5a29-zone-scraping_browser';
-        const PASSWORD = process.env.PASSWORD;
+        const USERNAME = process.env.USERNAME; // use the username bright data gave you
+        const PASSWORD = process.env.PASSWORD; // use your password bright data gave you
         const auth = `${USERNAME}:${PASSWORD}` ;
 
 
